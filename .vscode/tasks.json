@@ -1,0 +1,79 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Generate Bindings (Debug)",
+            "type": "shell",
+            "group": "build",
+            "options": {
+                "cwd": "${workspaceRoot}/thirdparty/godot-cpp"
+            },
+            "windows": {
+                "command": "scons platform=windows target=debug -j4 generate_bindings=yes"
+            },
+            "linux": {
+                "command": "scons platform=linux target=debug -j4 generate_bindings=yes"
+            },
+            "osx": {
+                "command": "scons platform=osx target=debug -j4 generate_bindings=yes"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Generate Bindings (Release)",
+            "type": "shell",
+            "group": "build",
+            "options": {
+                "cwd": "${workspaceRoot}/thirdparty/godot-cpp"
+            },
+            "windows": {
+                "command": "scons platform=windows target=release -j4 generate_bindings=yes"
+            },
+            "linux": {
+                "command": "scons platform=linux target=release -j4 generate_bindings=yes"
+            },
+            "osx": {
+                "command": "scons platform=osx target=release -j4 generate_bindings=yes"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Build Plugin (Debug)",
+            "type": "shell",
+            "group": "build",
+            "options": {
+                "cwd": "${workspaceRoot}/"
+            },
+            "windows": {
+                "command": "scons platform=windows target=debug target_name=GodotTerrain -j4"
+                
+            },
+            "linux": {
+                "command": "scons platform=linux target=debug target_name=GodotTerrain -j4"
+            },
+            "osx": {
+                "command": "scons platform=osx target=debug target_name=GodotTerrain -j4"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Build Plugin (Release)",
+            "type": "shell",
+            "group": "build",
+            "options": {
+                "cwd": "${workspaceRoot}/"
+            },
+            "windows": {
+                "command": "scons platform=windows target=release target_name=GodotTerrain -j4"
+            },
+            "linux": {
+                "command": "scons platform=linux target=release target_name=GodotTerrain -j4"
+            },
+            "osx": {
+                "command": "scons platform=osx target=release target_name=GodotTerrain -j4"
+            },
+        }
+    ]
+}

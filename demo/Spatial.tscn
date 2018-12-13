@@ -1,0 +1,99 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://FreeCamera.tscn" type="PackedScene" id=1]
+
+[sub_resource type="GDScript" id=1]
+
+script/source = "extends ImmediateGeometry
+
+const GRID_VERTS = [
+	Vector3(0,0,0),
+	Vector3(1,0,0),
+	Vector3(1,0,1),
+	Vector3(0,0,1),
+	Vector3(0,1,0),
+	Vector3(1,1,0),
+	Vector3(1,1,1),
+	Vector3(0,1,1)
+]
+
+var changes = false;
+
+var mc = preload(\"res://bin/MarchingCubes.gdns\").new();
+
+var values = [5,5,5,5,5,-5,5,-5]
+
+func _ready():
+	var vbox = $\"..\"/MainCamera/Panel/VBoxContainer;
+	for i in range(0, 8):
+		var hbox = HBoxContainer.new();
+		var slider = HSlider.new();
+		hbox.add_child(slider);
+		vbox.add_child(hbox);
+		slider.min_value = -5;
+		slider.max_value = 5;
+		slider.rounded = false;
+		slider.step = 0.01;
+		var text = Label.new();
+		slider.connect(\"value_changed\", self, \"change_text\", [text]);
+		slider.value = values[i];
+		hbox.add_child(text);
+		text.size_flags_horizontal = Control.SIZE_FILL;
+		slider.size_flags_horizontal = Control.SIZE_EXPAND_FILL;
+		slider.connect(\"value_changed\", self, \"value_changed\", [i]);
+	changes = true;
+
+func _process(delta):
+	if changes:
+		call_deferred(\"repolygonise\");
+
+func change_text(new_value, text):
+	text.text = str(new_value);
+
+func repolygonise():
+	self.clear();
+	var verts = mc.polygonise(GRID_VERTS as PoolVector3Array, values as PoolRealArray, 0);
+	self.begin(Mesh.PRIMITIVE_TRIANGLES);
+	for vert in verts:
+		self.add_vertex(vert);
+	self.end();
+	changes = false;
+	print(\"repolygonised with %d verts\" % verts.size());
+
+func value_changed(new_value, point_index):
+	if typeof(new_value) == TYPE_REAL or new_value.is_valid_float():
+		values[point_index] = float(new_value);
+		changes = true;"
+
+[sub_resource type="SpatialMaterial" id=2]
+
+flags_transparent = true
+albedo_color = Color( 1, 1, 1, 0.160784 )
+
+[sub_resource type="CubeMesh" id=3]
+
+material = SubResource( 2 )
+size = Vector3( 1, 1, 1 )
+
+[node name="Spatial" type="Spatial"]
+
+[node name="MainCamera" parent="." instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.99001 )
+
+[node name="Panel" type="Panel" parent="MainCamera"]
+anchor_top = 0.6
+anchor_right = 0.2
+anchor_bottom = 1.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainCamera/Panel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="ImmediateGeometry" type="ImmediateGeometry" parent="."]
+script = SubResource( 1 )
+
+[node name="MeshInstance" type="MeshInstance" parent="ImmediateGeometry"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.5, 0.5 )
+mesh = SubResource( 3 )
+material/0 = null
+

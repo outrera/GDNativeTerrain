@@ -1,0 +1,102 @@
+[gd_scene load_steps=2 format=2]
+
+[sub_resource type="GDScript" id=1]
+
+script/source = "extends Camera
+
+# class member variables go here, for example:
+# var a = 2
+# var b = \"textvar\"
+
+export var moveSpeed = 10;
+export var rotateSpeed = 5;
+export var maintainYAxis = true;
+
+export var clampYLook = true;
+export var maxYAngle = 89;
+
+var rotateDelta = 0;
+
+func _ready():
+	toggle_mouse_mode();
+
+func _process(delta):
+	rotateDelta = delta;
+	var moveDir = Vector3();
+	var rotAmt = Vector2();
+
+	if Input.is_action_just_pressed(\"toggle_mouse\"):
+		toggle_mouse_mode();
+
+	if(Input.get_mouse_mode() != Input.MOUSE_MODE_VISIBLE):
+		if(Input.is_action_pressed(\"move_forward\")):
+			moveDir += Vector3(0, 0, -1);
+		if(Input.is_action_pressed(\"move_backward\")):
+			moveDir += Vector3(0, 0, 1);
+		if(Input.is_action_pressed(\"move_right\")):
+			moveDir += Vector3(1, 0, 0);
+		if(Input.is_action_pressed(\"move_left\")):
+			moveDir += Vector3(-1, 0, 0);
+		if(Input.is_action_pressed(\"jump\")):
+			moveDir += Vector3(0, 1, 0);
+		if(Input.is_action_pressed(\"crouch\")):
+			moveDir += Vector3(0, -1, 0);
+
+		rotAmt = Input.get_last_mouse_speed();
+	if(maintainYAxis):
+		var vert = moveDir.y;
+		moveDir.y = 0;
+		self.translate(moveDir * moveSpeed * delta);
+		self.transform.origin.y += vert * moveSpeed * delta;
+	else:
+		self.translate(moveDir * moveSpeed * delta);
+
+func toggle_mouse_mode():
+	if(Input.get_mouse_mode() == Input.MOUSE_MODE_VISIBLE):
+		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED);
+	else:
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE);
+
+
+func mouse_is_enabled():
+	return Input.get_mouse_mode() == Input.MOUSE_MODE_VISIBLE;
+
+func _input(event):
+	if mouse_is_enabled(): return;
+
+	if event is InputEventMouseMotion:
+		if(maintainYAxis):
+			self.rotate_y(deg2rad((event.relative.x * -1) * rotateSpeed * rotateDelta));
+			if(clampYLook):
+				self.rotation.x = clamp(self.rotation.x + deg2rad(((event.relative.y * -1) * rotateSpeed * rotateDelta)), -deg2rad(maxYAngle), deg2rad(maxYAngle));
+			else:
+				self.rotate(self.get_transform().basis.x.normalized(), deg2rad((event.relative.y * -1) * rotateSpeed * rotateDelta));
+		else:
+			self.rotate(self.get_transform().basis.y.normalized(), deg2rad((event.relative.x * -1) * rotateSpeed * rotateDelta));
+			self.rotate(self.get_transform().basis.x.normalized(), deg2rad((event.relative.y * -1) * rotateSpeed * rotateDelta));
+
+"
+
+[node name="MainCamera" type="Camera" index="0"]
+
+keep_aspect = 1
+cull_mask = 1048575
+environment = null
+h_offset = 0.0
+v_offset = 0.0
+doppler_tracking = 0
+projection = 0
+current = false
+fov = 70.0
+size = 1.0
+near = 0.05
+far = 100.0
+script = SubResource( 1 )
+_sections_unfolded = [ "Transform" ]
+moveSpeed = 10
+rotateSpeed = 5
+maintainYAxis = true
+clampYLook = true
+maxYAngle = 89
+
+
