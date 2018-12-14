@@ -282,13 +282,13 @@ namespace godot
     void MarchingTetra::_register_methods() {
         register_method("polygonise", &MarchingTetra::godot_polygonise);
         register_method("_init", &MarchingTetra::_init);
-        register_property("use_alt_interp", &MarchingTetra::alt_interp, false);
+        register_property<MarchingTetra, bool>("use_alt_interp", &MarchingTetra::alt_interp, false);
     }
 
     void MarchingCubes::_init() {}
     void MarchingCubes::_register_methods() {
         register_method("polygonise", &MarchingCubes::godot_polygonise);
         register_method("_init", &MarchingCubes::_init);
-        register_property("use_alt_interp", &MarchingCubes::alt_interp, false);
+        register_property<MarchingCubes, bool>("use_alt_interp", &MarchingCubes::alt_interp, false);
     }
 }

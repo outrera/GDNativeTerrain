@@ -1,3 +1,6 @@
+#ifndef POLYGONISER_H
+#define POLYGONISER_H
+
 #include <Godot.hpp>
 #include <Array.hpp>
 
@@ -357,3 +360,4 @@ namespace godot
         static void _register_methods();
     };
 }
+#endif

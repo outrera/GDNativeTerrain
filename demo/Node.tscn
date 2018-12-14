@@ -1,0 +1,21 @@
+[gd_scene load_steps=2 format=2]
+
+[sub_resource type="GDScript" id=1]
+
+script/source = "extends Node
+
+const TerrainData = preload(\"res://bin/TerrainData.gdns\");
+
+func _ready():
+	var terrain = TerrainData.new();
+	randomize();
+	var simplex = OpenSimplexNoise.new();
+	for x in range(0, 16):
+		for y in range(0, 16):
+			for z in range(0, 16):
+				terrain.set_voxel(Vector3(x, y, z), simplex.get_noise_3d(x, y, z));
+	print(\"Save = %d\" % ResourceSaver.save(\"res://test_terrain.tres\", terrain));"
+
+[node name="Node" type="Node"]
+script = SubResource( 1 )
+
