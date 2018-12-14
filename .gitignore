@@ -32,3 +32,6 @@
 *.app
 
 .sconsign.dblite
+*.ilk
+*.pdb
+*.exp

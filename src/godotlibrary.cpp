@@ -16,4 +16,5 @@ extern "C" void GDN_EXPORT godot_nativescript_init(void *handle) {
 
     // Register classes
     godot::register_class<godot::MarchingCubes>();
+    godot::register_class<godot::MarchingTetra>();
 }

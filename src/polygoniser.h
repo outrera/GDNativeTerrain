@@ -16,6 +16,8 @@ namespace godot
         public:
         virtual Array polygonise(GridCell cell, float isolevel) = 0;
         virtual Array godot_polygonise(PoolVector3Array positions, PoolRealArray values, float isolevel) = 0;
+
+        bool alt_interp = false;
     };
 
     /*
@@ -27,7 +29,6 @@ namespace godot
         GODOT_CLASS(MarchingCubes, Polygoniser)
 
         protected:
-        static Vector3 VertexInterp(float isolevel, Vector3 pos1, Vector3 pos2, float val1, float val2);
         static constexpr const int edgeTable[256]={
         0x0  , 0x109, 0x203, 0x30a, 0x406, 0x50f, 0x605, 0x70c,
         0x80c, 0x905, 0xa0f, 0xb06, 0xc0a, 0xd03, 0xe09, 0xf00,
@@ -320,6 +321,7 @@ namespace godot
         {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}};
 
         public:
+        static const int MAX_VERTICES = 12;
         MarchingCubes();
         ~MarchingCubes();
 
@@ -327,6 +329,30 @@ namespace godot
         Array godot_polygonise(PoolVector3Array positions, PoolRealArray values, float isolevel);
 
         //GDNative
+        void _init();
+        static void _register_methods();
+    };
+
+    /*
+        Based on Paul Bourke's web page "Polygonising a scalar field"
+        http://paulbourke.net/geometry/polygonise/source1.c
+    */
+    class MarchingTetra : public Polygoniser
+    {
+        GODOT_CLASS(MarchingTetra, Polygoniser)
+
+        protected:
+        int PolygoniseTri(GridCell cell, float isolevel, Array &vertices, int vert1, int vert2, int vert3, int vert4);
+
+        public:
+        static const int MAX_VERTICES = 6;
+        Array polygonise(GridCell cell, float isolevel);
+        Array godot_polygonise(PoolVector3Array positions, PoolRealArray values, float isolevel);
+
+        MarchingTetra();
+        ~MarchingTetra();
+
+        // GDNative
         void _init();
         static void _register_methods();
     };

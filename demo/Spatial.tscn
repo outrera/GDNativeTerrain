@@ -24,6 +24,7 @@ var mc = preload(\"res://bin/MarchingCubes.gdns\").new();
 var values = [1,1,1,1,1,-1,1,1]
 
 func _ready():
+	#mc.use_alt_interp = true;
 	var vbox = $\"..\"/MainCamera/Panel/VBoxContainer;
 	for i in range(0, 8):
 		var hbox = HBoxContainer.new();
