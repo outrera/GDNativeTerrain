@@ -21,7 +21,7 @@ var changes = false;
 
 var mc = preload(\"res://bin/MarchingCubes.gdns\").new();
 
-var values = [5,5,5,5,5,-5,5,-5]
+var values = [1,1,1,1,1,-1,1,1]
 
 func _ready():
 	var vbox = $\"..\"/MainCamera/Panel/VBoxContainer;

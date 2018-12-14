@@ -10,7 +10,6 @@ namespace godot
     */
     Array MarchingCubes::polygonise(GridCell cell, float isolevel)
     {
-        Godot::print("DLL: beginning polygonisation");
         /* 
             Determine the index into the edge table
             which tells us which vertices are inside of the surface
@@ -80,8 +79,6 @@ namespace godot
             triangles.append(vertlist[triTable[cubeindex][i+2]]);
         }
 
-        Godot::print("DLL: Returning array");
-        Godot::print((Variant)triangles);
         return triangles;
     }
 
@@ -122,14 +119,12 @@ namespace godot
 
     Array MarchingCubes::godot_polygonise(PoolVector3Array positions, PoolRealArray values, float isolevel)
     {
-        Godot::print("DLL: recieved dictionary");
         GridCell newcell;
         for(int i = 0; i < 8; i++)
         {
             newcell.positions[i] = positions[i];
             newcell.values[i] = values[i];
         }
-        Godot::print("DLL: dictionary translated. polygonising...");
         return this->polygonise(newcell, isolevel);
     }
 
