@@ -16,7 +16,7 @@ _global_script_class_icons={
 [application]
 
 config/name="GodotTerrain"
-run/main_scene="res://Spatial.tscn"
+run/main_scene="res://PolygoniserTest.tscn"
 config/icon="res://icon.png"
 
 [input]

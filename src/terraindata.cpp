@@ -30,6 +30,10 @@ namespace godot
             highest_values.z = position.z;
         else if(position.z < lowest_values.z)
             lowest_values.z = position.z;
+        
+        Array args;
+        args.append(position);
+        emit_signal("voxels_changed", args);
     }
 
     GridCell TerrainData::get_grid_cell(Vector3 bottom_left)
@@ -74,5 +78,10 @@ namespace godot
         register_method("_init", &TerrainData::_init);
         register_method("get_cube_vertex", &TerrainData::get_cube_vertex);
         register_property<TerrainData, Dictionary>("_data", &TerrainData::_data, Dictionary());
+        Dictionary args;
+        args["changes"] = GODOT_VARIANT_TYPE_ARRAY;
+        register_signal<TerrainData>("voxels_changed", args);
+        register_method("get_highest_values", &TerrainData::get_highest_values);
+        register_method("get_lowest_values", &TerrainData::get_lowest_values);
     }
 }

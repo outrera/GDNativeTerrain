@@ -23,13 +23,13 @@ namespace godot
         {
             Vector3 CUBE_VERTICES[8] = {
             Vector3(0,0,0),
-            Vector3(1,0,0),
-            Vector3(1,0,1),
             Vector3(0,0,1),
+            Vector3(1,0,1),
+            Vector3(1,0,0),
             Vector3(0,1,0),
-            Vector3(1,1,0),
+            Vector3(0,1,1),
             Vector3(1,1,1),
-            Vector3(0,1,1)
+            Vector3(1,1,0)
             };
             return CUBE_VERTICES[index % 8];
         }
@@ -39,6 +39,9 @@ namespace godot
 
         float get_voxel(Vector3 position);
         void set_voxel(Vector3 position, float value);
+        
+        inline Vector3 get_highest_values() {return highest_values;};
+        inline Vector3 get_lowest_values() {return lowest_values;};
 
         GridCell get_grid_cell(Vector3 bottom_left);
 
